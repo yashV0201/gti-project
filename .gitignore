@@ -1,4 +1,4 @@
 node_modules/
 
-ca.pem
+# ca.pem
 .env
