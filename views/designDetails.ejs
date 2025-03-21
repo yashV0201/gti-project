@@ -29,6 +29,15 @@
     document.getElementById('updateBtn').addEventListener('click', () => {
         document.getElementById('updateForm').style.display = 'block';
     });
+    // Get all image elements on the page
+    const images = document.getElementsByTagName('img');
+
+    // Iterate through all images and set their size
+    for (let i = 0; i < images.length; i++) {
+      images[i].style.width = 'auto';  // Set desired width
+      images[i].style.height = '200px';  // Maintain aspect ratio
+      // Or set a fixed height: images[i].style.height = '200px';
+    }
 </script>
 
 <%- include('partials/footer') %>
