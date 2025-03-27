@@ -1,0 +1,15 @@
+<%- include('partials/header') %>
+
+<div class="container">
+    <h1>Need Categories</h1>
+    <div class="categories-grid">
+        <% list.forEach(category => { %>
+            <div class="category-card">
+                
+                <a href="/category/<%= category.id %>" class="btn" style="text-decoration: none;color: black;"><h2><%= category.name %></h2></a>
+            </div>
+        <% }); %>
+    </div>
+</div>
+
+<%- include('partials/footer') %>

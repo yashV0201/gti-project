@@ -1,0 +1,158 @@
+<%- include('partials/header') %>
+
+<style>
+  /* Scoped styles specifically for design method content */
+  .design-document-content {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f9f9f9;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+
+  .design-document-content p {
+      line-height: 1.6;
+      margin-bottom: 15px;
+      color: #333;
+      text-align: left;
+      padding: 0 20px;
+  }
+
+  .design-document-content h1, 
+  .design-document-content h2, 
+  .design-document-content h3 {
+      color: #2c3e50;
+      text-align: center;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 10px;
+      margin: 20px 0;
+  }
+
+  .design-document-content img {
+      max-width: 25%;
+      height: auto;
+      display: block;
+      margin: 20px auto;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      cursor:pointer;
+      transition: transform 0.3s ease;
+  }
+
+  .design-document-content img:hover {
+      transform: scale(1.05);
+  }
+
+  /* Image popup styles */
+  #image-popup {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.8);
+        align-items: center;
+        justify-content: center;
+    }
+
+    #image-popup.show {
+        display: flex;
+    }
+
+    #image-popup img {
+        max-width: 90%;
+        max-height: 90%;
+        object-fit: contain;
+    }
+
+    #image-popup-close {
+        position: absolute;
+        top: 15px;
+        right: 35px;
+        color: white;
+        font-size: 40px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+  @media (max-width: 600px) {
+      .design-document-content {
+          padding: 10px;
+      }
+      
+      .design-document-content p {
+          padding: 0 10px;
+      }
+
+      .design-document-content img {
+            max-width: 100%; /* Full width on small screens */
+      }
+  }
+</style>
+
+<div class="container mt-5">
+  <h1><%= title %></h1>
+  <button id="updateBtn" class="btn">Update</button>
+    
+    <div id="updateForm" style="display: none;">
+        <form action="/design-methods/<%= id %>?_method=PUT" method="POST" enctype="multipart/form-data">
+            <input type="text" class="form-control" name="title" id="title" value="<%= title %>" required>
+            <input type="hidden" name="id" value="<%= Number(id) %>">
+            <input type="file" id="document" placeholder="enter updated file" name="document">
+                <small>Supported formats: PDF, DOCX, etc.</small>
+            <button type="submit" class="btn">Update</button>
+            <button type="button" class="btn cancel" onclick="hideForm()">Cancel</button>
+        </form>
+    </div>
+  <hr>
+  <!-- The HTML conversion of the Word document will be inserted here -->
+  <div class="design-document-content">
+    <%- html %>
+  </div>
+  <div id="image-popup">
+    <span id="image-popup-close">&times;</span>
+    <img id="popup-image" src="" alt="Enlarged image">
+  </div>
+</div>
+
+<script>
+    function hideForm() {
+        document.getElementById('updateForm').style.display = 'none';
+    }
+
+    document.getElementById('updateBtn').addEventListener('click', () => {
+        document.getElementById('updateForm').style.display = 'block';
+    });
+    // Get all image elements on the page
+    document.addEventListener('DOMContentLoaded', () => {
+        const images = document.querySelectorAll('.design-document-content img');
+        const popup = document.getElementById('image-popup');
+        const popupImg = document.getElementById('popup-image');
+        const closeBtn = document.getElementById('image-popup-close');
+
+        // Add click event to all images
+        images.forEach(img => {
+            img.addEventListener('click', () => {
+                popupImg.src = img.src;
+                popup.classList.add('show');
+            });
+        });
+
+        // Close popup when close button is clicked
+        closeBtn.addEventListener('click', () => {
+            popup.classList.remove('show');
+        });
+
+        // Close popup when clicking outside the image
+        popup.addEventListener('click', (e) => {
+            if (e.target === popup) {
+                popup.classList.remove('show');
+            }
+        });
+    });
+</script>
+
+<%- include('partials/footer') %>

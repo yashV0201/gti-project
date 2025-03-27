@@ -1,37 +1,45 @@
 <%- include('partials/header') %>
 
-
-
-<div class="container">
-    <h1>Design Methods</h1>
-    <button id="addNewBtn" class="btn">Add New Design Method</button>
-    
-    <div id="addForm" style="display: none;">
-        <form action="/subcategories/<%= id %>/attach-design-method" method="POST">
-            <input type="hidden" name="subcategoryId" value="<%= id %>">
-            <select name="designMethodId" required>
+<div class="bg-slate-300 h-screen"> 
+    <div class="bg-slate-300 container mx-auto max-w-4xl p-4">
+         <h1 class="mb-6 mt-4 text-center text-5xl font-extrabold leading-tight text-gray-900">Design Methods</h1>
+         <div class="flex justify-between items-center mb-4">
+            <button id="addNewBtn" class="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Add New Design Method</button>
+          </div>
+          
+          <div id="addForm" style="display: none;" class="mb-6 w-full">
+            <form action="/subcategories/<%= id %>/attach-design-method" method="POST" class="p-4 rounded-lg flex flex-wrap items-center gap-4 w-full">
+              <input type="hidden" name="subcategoryId" value="<%= id %>">
+              
+              <select name="designMethodId" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 flex-grow dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 <option value="">Select Design Method</option>
                 <% designMethods.forEach(method => { %>
                   <option value="<%= method.id %>"><%= method.title %></option>
                 <% }); %>
               </select>
               
-            <button type="submit">Attach Design Method</button>
-            <button type="button" class="btn cancel" onclick="hideForm()">Cancel</button>
-        </form>
-    </div>
-    <div class="categories-grid">
-         
-        <% results.forEach(result => { %>
-            <div class="category-card" style="display: flex;align-items: center;">
-                <a href="/design-methods/<%= result.id %>" class="btn" style="text-decoration: none;color: black;"><h2><%= result.title %></h2></a>
-                <form action="/subcategories/<%= id %>/remove-design-method/<%= result.id %>?_method=DELETE" method="POST" style="margin: 10px;">
-                    <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+              <div class="flex gap-2">
+                <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Attach Design Method</button>
+                <button type="button" class="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900" onclick="hideForm()">Cancel</button>
+              </div>
+            </form>
+          </div>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <% results.forEach(result => { %>
+              <div class="relative bg-gray-50 rounded-lg shadow-md p-6 transition-all duration-300 hover:shadow-lg hover:scale-105">
+                <a href="/design-methods/<%= result.id %>" class="absolute inset-0 z-10" aria-label="<%= result.title %>"></a>
+                <h2 class="text-2xl font-bold text-gray-900"><%= result.title %></h2>
+                <form action="/subcategories/<%= id %>/remove-design-method/<%= result.id %>?_method=DELETE" method="POST" class="mt-4 relative z-20">
+                  <button type="submit" class="bg-red-600 hover:bg-red-700 text-white font-medium py-1.5 px-3 text-sm rounded-full transition-colors">Remove</button>
                 </form>
-            </div>
-        <% }); %>
-    </div>
-</div>
+              </div>
+            <% }); %>
+          </div>
+        </div> 
+    </div>      
+
+
 
 <script>
     function hideForm() {

@@ -1,65 +1,72 @@
 <%- include('partials/header') %>
 
-<div class="container">
-    <h1><%= need.name %> - Solutions</h1>
-    
-    <button id="addNewBtn" class="btn">Add New Solution</button>
-    
-    <div id="addForm" style="display: none;">
-        <form action="/api/solutions" method="POST">
-            <textarea name="content" placeholder="Enter solution" required></textarea>
-            <input type="hidden" name="subcategory_id" value="<%= Number(need.id) %>">
-            <button type="submit" class="btn">Save</button>
-            <button type="button" class="btn cancel" onclick="hideForm()">Cancel</button>
-        </form>
-    </div>
-
-    <div class="solutions-list">
-        <ol>
-            <% solutions.forEach(solution => { %>
-                <li class="solution-item" data-id="<%= solution.id %>">
-                    <div class="solution-content"><%= solution.content %></div>
-                    <div class="action-buttons">
-                        <button class="btn edit-btn" onclick="editSolution('<%= solution.id %>')">Edit</button>
-                        <button class="btn delete-btn" onclick="deleteSolution('<%= solution.id %>')">Delete</button>
-                    </div>
-                </li>
-            <% }); %>
-        </ol>
-    </div>
-</div>
-<form action='/subcategory/<%= need.id %>/design-methods'>
-    <input type="submit" value="Design Methods" />
-</form>
-
-<script>
-    function hideForm() {
-        document.getElementById('addForm').style.display = 'none';
-    }
-
-    document.getElementById('addNewBtn').addEventListener('click', () => {
-        document.getElementById('addForm').style.display = 'block';
-    });
-
-    function editSolution(id) {
-        const item = document.querySelector(`.solution-item[data-id="${id}"]`);
-        const content = item.querySelector('.solution-content').textContent;
-        item.innerHTML = `
-            <form action="/api/solutions/${id}?_method=PUT" method="POST">
-                <textarea name="content" required>${content}</textarea>
-                <button type="submit" class="btn" onclick="location.reload()">Save</button>
-                <button type="button" class="btn cancel" onclick="location.reload()">Cancel</button>
+<div class="bg-slate-300 h-screen"> 
+    <div class="bg-slate-300 container mx-auto max-w-4xl p-4"> 
+        <h1 class="mb-6 mt-4 text-center text-5xl font-extrabold leading-tight text-gray-900"><%= need.name %> - Solutions</h1>
+        <div class="flex justify-between items-center mb-4">
+            <button id="addNewBtn" class="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Add New Solution</button>
+            
+            <form action='/subcategory/<%= need.id %>/design-methods'>
+              <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Design Methods</button>
             </form>
-        `;
-    }
+          </div>
+          
+          <div id="addForm" style="display: none;" class="mb-6 w-full">
+            <form action="/api/solutions" method="POST" class="p-4 rounded-lg flex flex-wrap items-center gap-4 w-full">
+              <textarea name="content" placeholder="Enter solution" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 flex-grow w-full h-32 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></textarea>
+              <input type="hidden" name="subcategory_id" value="<%= Number(need.id) %>">
+              <div class="flex gap-2 ml-auto">
+                <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Save</button>
+                <button type="button" class="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900" onclick="hideForm()">Cancel</button>
+              </div>
+            </form>
+          </div>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <% solutions.forEach(solution => { %>
+              <div class="relative bg-gray-50 rounded-lg shadow-md p-6 transition-all duration-300 hover:shadow-lg hover:scale-105 flex flex-col h-full" data-id="<%= solution.id %>">
+                <div class="solution-content text-gray-800 mb-4 whitespace-pre-wrap flex-1"><%= solution.content %></div>
+                <div class="action-buttons flex gap-2 relative z-20 mt-auto">
+                  <button class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-1.5 px-3 text-sm rounded-full transition-colors" onclick="editSolution('<%= solution.id %>')">Edit</button>
+                  <button class="bg-red-600 hover:bg-red-700 text-white font-medium py-1.5 px-3 text-sm rounded-full transition-colors" onclick="deleteSolution('<%= solution.id %>')">Delete</button>
+                </div>
+              </div>
+            <% }); %>
+          </div>
+    </div> 
+</div>
+    
+<script>
+         function hideForm() { document.getElementById('addForm').style.display = 'none'; } 
+         document.getElementById('addNewBtn').addEventListener('click', () => {
+             document.getElementById('addForm').style.display = 'block'; 
+            }); 
 
-    function deleteSolution(id) {
-        if(confirm('Are you sure you want to delete this solution?')) {
-            fetch(`/api/solutions/${id}`, { method: 'DELETE' })
-                .then(() => location.reload())
-                .catch(err => alert('Failed to delete solution'));
+
+        function editSolution(id) { 
+            const item = document.querySelector(`div[data-id="${id}"]`); 
+            const content = item.querySelector('.solution-content').textContent; 
+            const originalHtml = item.innerHTML; 
+            item.innerHTML = ` 
+                <form action="/api/solutions/${id}?_method=PUT" method="POST" class="p-4 flex flex-col gap-4 w-full"> 
+                    <textarea name="content" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 w-full h-32">${content}</textarea>
+                    <div class="flex gap-2 justify-end">
+                        <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-1.5 px-3 text-sm rounded-full transition-colors" onclick="location.reload()">Save</button>
+                        <button type="button" class="bg-red-600 hover:bg-red-700 text-white font-medium py-1.5 px-3 text-sm rounded-full transition-colors" onclick="location.reload()">Cancel</button>
+                    </div>
+                </form>`;
         }
-    }
+
+        function deleteSolution(id) {
+            if(confirm('Are you sure you want to delete this solution?')) {
+                fetch(`/api/solutions/${id}`, { method: 'DELETE' })
+                    .then(() => location.reload())
+                    .catch(err => alert('Failed to delete solution'));
+            }
+        }
+        
 </script>
+
+
 
 <%- include('partials/footer') %>

@@ -1,12 +1,18 @@
 <%- include('partials/header') %>
 
-<div class="container">
-    <h1>Need Categories</h1>
-    <div class="categories-grid">
+<div class="h-screen grid grid-cols-6 bg-slate-300">
+    <h1 class="col-span-4 col-start-2 p-8 max-h-40 text-2xl flex items-center justify-center mt-16 font-extrabold text-gray-900 md:text-5xl lg:text-6xl">Need Categories</h1>
+    <div class=" grid grid-cols-3 gap-4 col-start-2 col-end-6 -mt-35">
         <% list.forEach(category => { %>
-            <div class="category-card">
+            <div class="">
+                <a href="/category/<%= category.id %>" class="flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow-sm md:flex-row md:max-w-xl hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
+                    <!-- <img class="object-cover w-full rounded-t-lg h-96 md:h-auto md:w-48 md:rounded-none md:rounded-s-lg" src="/docs/images/blog/image-4.jpg" alt=""> -->
+                    <div class="flex flex-col justify-center items-center leading-normal w-full text-center">
+                        <h5 class="m-4 text-3xl font-semibold tracking-tight text-gray-900 dark:text-white"><%= category.name %></h5>
+                    </div>
+                </a>
                 
-                <a href="/category/<%= category.id %>" class="btn" style="text-decoration: none;color: black;"><h2><%= category.name %></h2></a>
+                <!-- <a href="/category/<%= category.id %>" class="btn" style="text-decoration: none;color: black;"><h2><%= category.name %></h2></a> -->
             </div>
         <% }); %>
     </div>

@@ -1,0 +1,47 @@
+<%- include('partials/header') %>
+
+
+
+<div class="container">
+    <h1>Design Methods</h1>
+    <button id="addNewBtn" class="btn">Add New Design Method</button>
+    
+    <div id="addForm" style="display: none;">
+        <form action="/subcategories/<%= id %>/attach-design-method" method="POST">
+            <input type="hidden" name="subcategoryId" value="<%= id %>">
+            <select name="designMethodId" required>
+                <option value="">Select Design Method</option>
+                <% designMethods.forEach(method => { %>
+                  <option value="<%= method.id %>"><%= method.title %></option>
+                <% }); %>
+              </select>
+              
+            <button type="submit">Attach Design Method</button>
+            <button type="button" class="btn cancel" onclick="hideForm()">Cancel</button>
+        </form>
+    </div>
+    <div class="categories-grid">
+         
+        <% results.forEach(result => { %>
+            <div class="category-card" style="display: flex;align-items: center;">
+                <a href="/design-methods/<%= result.id %>" class="btn" style="text-decoration: none;color: black;"><h2><%= result.title %></h2></a>
+                <form action="/subcategories/<%= id %>/remove-design-method/<%= result.id %>?_method=DELETE" method="POST" style="margin: 10px;">
+                    <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+                </form>
+            </div>
+        <% }); %>
+    </div>
+</div>
+
+<script>
+    function hideForm() {
+        document.getElementById('addForm').style.display = 'none';
+    }
+
+    document.getElementById('addNewBtn').addEventListener('click', () => {
+        document.getElementById('addForm').style.display = 'block';
+    });
+</script>
+
+
+<%- include('partials/footer') %>

@@ -1,0 +1,65 @@
+<%- include('partials/header') %>
+
+<div class="container">
+    <h1><%= need.name %> - Solutions</h1>
+    
+    <button id="addNewBtn" class="btn">Add New Solution</button>
+    
+    <div id="addForm" style="display: none;">
+        <form action="/api/solutions" method="POST">
+            <textarea name="content" placeholder="Enter solution" required></textarea>
+            <input type="hidden" name="subcategory_id" value="<%= Number(need.id) %>">
+            <button type="submit" class="btn">Save</button>
+            <button type="button" class="btn cancel" onclick="hideForm()">Cancel</button>
+        </form>
+    </div>
+
+    <div class="solutions-list">
+        <ol>
+            <% solutions.forEach(solution => { %>
+                <li class="solution-item" data-id="<%= solution.id %>">
+                    <div class="solution-content"><%= solution.content %></div>
+                    <div class="action-buttons">
+                        <button class="btn edit-btn" onclick="editSolution('<%= solution.id %>')">Edit</button>
+                        <button class="btn delete-btn" onclick="deleteSolution('<%= solution.id %>')">Delete</button>
+                    </div>
+                </li>
+            <% }); %>
+        </ol>
+    </div>
+</div>
+<form action='/subcategory/<%= need.id %>/design-methods'>
+    <input type="submit" value="Design Methods" />
+</form>
+
+<script>
+    function hideForm() {
+        document.getElementById('addForm').style.display = 'none';
+    }
+
+    document.getElementById('addNewBtn').addEventListener('click', () => {
+        document.getElementById('addForm').style.display = 'block';
+    });
+
+    function editSolution(id) {
+        const item = document.querySelector(`.solution-item[data-id="${id}"]`);
+        const content = item.querySelector('.solution-content').textContent;
+        item.innerHTML = `
+            <form action="/api/solutions/${id}?_method=PUT" method="POST">
+                <textarea name="content" required>${content}</textarea>
+                <button type="submit" class="btn" onclick="location.reload()">Save</button>
+                <button type="button" class="btn cancel" onclick="location.reload()">Cancel</button>
+            </form>
+        `;
+    }
+
+    function deleteSolution(id) {
+        if(confirm('Are you sure you want to delete this solution?')) {
+            fetch(`/api/solutions/${id}`, { method: 'DELETE' })
+                .then(() => location.reload())
+                .catch(err => alert('Failed to delete solution'));
+        }
+    }
+</script>
+
+<%- include('partials/footer') %>
