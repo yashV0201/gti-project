@@ -2,6 +2,45 @@
 
 <style>
   /* Scoped styles specifically for design method content */
+  /* .design-document-content {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f9f9f9;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+
+  .design-document-content p {
+      line-height: 1.6;
+      margin-bottom: 15px;
+      color: #333;
+      text-align: left;
+      padding: 0 20px;
+  }
+
+  .design-document-content h1, 
+  .design-document-content h2, 
+  .design-document-content h3 {
+      color: #2c3e50;
+      text-align: center;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 10px;
+      margin: 20px 0;
+  }
+
+  .design-document-content img {
+      max-width: 25%;
+      height: auto;
+      display: block;
+      margin: 20px auto;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      cursor:pointer;
+      transition: transform 0.3s ease;
+  }*/
+    
+
   .design-document-content img:hover {
       transform: scale(1.05);
   } 
@@ -56,23 +95,25 @@
 </style>
 
 <div class="container mt-5">
+  <!-- <h1><%= title %></h1>
+  <button id="updateBtn" class="btn">Update</button>
+    
+    <div id="updateForm" style="display: none;">
+        <form action="/design-methods/<%= id %>?_method=PUT" method="POST" enctype="multipart/form-data">
+            <input type="text" class="form-control" name="title" id="title" value="<%= title %>" required>
+            <input type="hidden" name="id" value="<%= Number(id) %>">
+            <input type="file" id="document" placeholder="enter updated file" name="document">
+                <small>Supported formats:DOCX only</small>
+            <button type="submit" class="btn">Update</button>
+            <button type="button" class="btn cancel" onclick="hideForm()">Cancel</button>
+        </form>
+    </div> -->
     <div class="max-w-4xl mx-auto px-4">
         <h1 class="text-5xl font-extrabold text-center my-8"><%= title %></h1>
         
         <div class="flex justify-center mb-6">
-            <% if (currentUser && currentUser.role === 'admin') { %>
-              <!-- Green button for admin -->
-              <button id="updateBtn" class="bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-6 rounded-full transition-colors">
-                Update
-              </button>
-            <% } else { %>
-              <!-- Gray button for non-admin users, disabled -->
-              <button id="updateBtn" class="bg-gray-600 text-white font-medium py-2 px-6 rounded-full transition-colors cursor-not-allowed opacity-50" disabled>
-                Update
-              </button>
-            <% } %>
-          </div>
-          
+          <button id="updateBtn" class="bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-6 rounded-full transition-colors">Update</button>
+        </div>
           
         <div id="updateForm" style="display: none;" class="bg-blue-200 rounded-lg p-6 max-w-2xl mx-auto mb-8">
           <form action="/design-methods/<%= id %>?_method=PUT" method="POST" enctype="multipart/form-data" class="flex flex-col space-y-4">
@@ -80,6 +121,16 @@
               class="bg-gray-800 text-white border border-gray-700 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
             <input type="hidden" name="id" value="<%= Number(id) %>">
             
+            <!-- <div class="space-y-1">
+              <input type="file" id="document" name="document" 
+                class="bg-gray-800 text-white border border-gray-700 rounded-lg p-3 w-full">
+              <small class="text-gray-600 pl-2">Supported formats: DOCX only</small>
+            </div>
+            
+            <div class="flex justify-end space-x-3 mt-4">
+              <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-full transition-colors">Save</button>
+              <button type="button" onclick="hideForm()" class="bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-6 rounded-full transition-colors">Cancel</button>
+            </div> -->
             <div class="flex flex-col md:flex-row md:items-center gap-4">
                 <input type="file" class="flex-grow p-3 bg-gray-800 text-white rounded-lg">
                 <div class="flex gap-2">
@@ -109,10 +160,7 @@
     }
 
     document.getElementById('updateBtn').addEventListener('click', () => {
-        // if(currentUser && currentUser.role === 'admin'){
-            document.getElementById('updateForm').style.display = 'block';
-        // }
-        
+        document.getElementById('updateForm').style.display = 'block';
     });
     // // Get all image elements on the page
     // const images = document.getElementsByTagName('img');
@@ -163,6 +211,26 @@
     // Apply Tailwind classes to the container
     contentContainer.classList.add('max-w-4xl', 'mx-auto', 'p-6', 'bg-slate-300', 'rounded-lg', 'shadow-md');
     
+    // Process headings
+    const headings = contentContainer.querySelectorAll('h1, h2, h3, h4, h5, h6');
+    headings.forEach(heading => {
+        // Remove any existing classes
+        heading.className = '';
+        
+        // Apply common heading styles
+        heading.classList.add('font-bold', 'text-center', 'border-b', 'border-gray-200', 'pb-3', 'mb-4');
+        
+        // Apply specific styles based on heading level
+        if (heading.tagName === 'H1') {
+            heading.classList.add('text-3xl', 'text-indigo-800', 'mt-8', 'mb-6');
+        } else if (heading.tagName === 'H2') {
+            heading.classList.add('text-2xl', 'text-indigo-700', 'mt-6', 'mb-4');
+        } else if (heading.tagName === 'H3') {
+            heading.classList.add('text-xl', 'text-indigo-600', 'mt-4', 'mb-3');
+        } else {
+            heading.classList.add('text-lg', 'text-indigo-500', 'mt-3', 'mb-2');
+        }
+    });
     
     // Process paragraphs
     const paragraphs = contentContainer.querySelectorAll('p');
@@ -252,6 +320,22 @@
     codeBlocks.forEach(block => {
         block.classList.add('bg-gray-100', 'rounded', 'p-2', 'font-mono', 'text-sm', 'overflow-x-auto');
     });
+
+    // Enhance the image popup
+    const popup = document.getElementById('image-popup');
+    if (popup) {
+        popup.classList.add('flex', 'items-center', 'justify-center', 'transition-opacity', 'duration-300');
+        
+        const closeBtn = document.getElementById('image-popup-close');
+        if (closeBtn) {
+            closeBtn.classList.add('text-white', 'text-4xl', 'absolute', 'top-4', 'right-8', 'cursor-pointer', 'hover:text-gray-300', 'transition-colors');
+        }
+        
+        const popupImg = document.getElementById('popup-image');
+        if (popupImg) {
+            popupImg.classList.add('max-w-[90%]', 'max-h-[90%]', 'object-contain', 'rounded-lg', 'shadow-2xl');
+        }
+    }
     
     // Add responsive design improvements
     document.querySelectorAll('.design-document-content > *').forEach(element => {

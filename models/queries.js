@@ -1,6 +1,19 @@
 const pool = require('./db')
 
 const queries = {
+    async getUserByUsername(username) {
+        const result = await pool.query('SELECT * FROM users WHERE username = $1', [username]);
+        return result.rows[0]; // Return the first row (user object)
+    },
+    
+      async getUserById(id) {
+        const result = await pool.query('SELECT * FROM users WHERE id = $1', [id]);
+        return result.rows[0]; // Return the first row (user object)
+    },
+    async getNeedCategories(){
+        const result = await pool.query('SELECT * FROM categories');
+        return result.rows;
+    },
     async getNeedCategories(){
         const result = await pool.query('SELECT * FROM categories');
         return result.rows;

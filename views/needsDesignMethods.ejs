@@ -4,7 +4,9 @@
     <div class="bg-slate-300 container mx-auto max-w-4xl p-4">
          <h1 class="mb-6 mt-4 text-center text-5xl font-extrabold leading-tight text-gray-900">Design Methods</h1>
          <div class="flex justify-between items-center mb-4">
+          <% if(currentUser && currentUser.role === 'admin') {%>
             <button id="addNewBtn" class="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Add New Design Method</button>
+            <% } %>
           </div>
           
           <div id="addForm" style="display: none;" class="mb-6 w-full">
@@ -30,9 +32,11 @@
               <div class="relative bg-gray-50 rounded-lg shadow-md p-6 transition-all duration-300 hover:shadow-lg hover:scale-105">
                 <a href="/design-methods/<%= result.id %>" class="absolute inset-0 z-10" aria-label="<%= result.title %>"></a>
                 <h2 class="text-2xl font-bold text-gray-900"><%= result.title %></h2>
+                <% if(currentUser && currentUser.role === 'admin') {%>
                 <form action="/subcategories/<%= id %>/remove-design-method/<%= result.id %>?_method=DELETE" method="POST" class="mt-4 relative z-20">
                   <button type="submit" class="bg-red-600 hover:bg-red-700 text-white font-medium py-1.5 px-3 text-sm rounded-full transition-colors">Remove</button>
                 </form>
+                <% } %>
               </div>
             <% }); %>
           </div>

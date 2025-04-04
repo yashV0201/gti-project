@@ -4,9 +4,11 @@
 <div class="bg-slate-300 container mx-auto max-w-4xl p-4">
     <h1 class="mb-6 mt-4 text-center text-5xl font-extrabold leading-tight text-gray-900"><%= category.name %></h1>
     
-    <div class="flex justify-between items-center mb-4">
-        <button id="addNewBtn" class="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Add New Subcategory</button>
-    </div>
+    <% if(currentUser && currentUser.role === 'admin'){ %>
+        <div class="flex justify-between items-center mb-4">
+            <button id="addNewBtn" class="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Add New Subcategory</button>
+        </div>
+    <% } %>
     
     <div id="addForm" style="display: none;" class="mb-6 w-full">
         <form action="/api/subcategories" method="POST" class="p-4 rounded-lg flex flex-wrap items-center gap-4 w-full">
@@ -28,6 +30,7 @@
                 <div class="action-buttons flex gap-2">
                     <!-- <button class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" onclick="editSubcategory('<%= subcategory.id %>', '<%= subcategory.name %>')"><i class="fa-solid fa-pen" aria-hidden="true"></i></button>
                     <button class="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-4 py-2 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900" onclick="deleteSubcategory('<%= subcategory.id %>')">Delete</button> -->
+                    <% if(currentUser && currentUser.role === 'admin') {%>
                     <button class="text-grey focus:outline-none font-medium rounded-full text-sm px-4 py-2 text-center" onclick="editSubcategory('<%= subcategory.id %>','<%= subcategory.name %>')">
                         <i class="fa-solid fa-pen" 
                         style="color: #d3d3d3; cursor: pointer; transition: color 0.3s ease;" 
@@ -42,6 +45,7 @@
                         onmouseout="this.style.color='#d3d3d3'"
                         aria-hidden="true"></i>
                     </button>
+                    <% } %>
                 </div>
             </div>
         <% }); %>

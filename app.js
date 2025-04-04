@@ -5,7 +5,15 @@ const multer = require('multer')
 const path = require('path')
 const mainController = require('./controllers/mainController');
 const designController = require('./controllers/designMethodController');
+const authController = require('./controllers/authController');
+const queries = require('./models/queries')
 const methodOverride = require('method-override');
+
+const session = require('express-session');
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+const bcrypt = require('bcrypt');
+
 
 // Configure Multer for file uploads
 const storage = multer.diskStorage({
@@ -24,6 +32,61 @@ app.use(express.json());
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
+
+// Configure sessions (use your own secret in production)
+app.use(
+  session({
+    secret: 'mysecret123',
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+
+// Initialize Passport
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Passport Local Strategy
+passport.use(
+  new LocalStrategy(async (username, password, done) => {
+    try {
+      // Here we assume queries.getUserByUsername returns a user row
+      const user = await queries.getUserByUsername(username);
+      if (!user) {
+        return done(null, false, { message: 'Incorrect username.' });
+      }
+      const isValid = await bcrypt.compare(password, user.password);
+      if (!isValid) return done(null, false, { message: 'Incorrect password.' });
+      return done(null, user);
+    } catch (err) {
+      return done(err);
+    }
+  })
+);
+
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+});
+passport.deserializeUser(async (id, done) => {
+  try {
+    const user = await queries.getUserById(id);
+    done(null, user);
+  } catch (err) {
+    done(err);
+  }
+});
+
+// Make the authenticated user available in every template:
+app.use((req, res, next) => {
+  res.locals.currentUser = req.user || null;
+  next();
+});
+
+// Login routes (only admin access)
+app.get('/login', authController.showLogin);
+app.post('/login', authController.login);
+app.get('/logout', authController.logout);
+
 
 // View routes
 app.get('/', mainController.showHome);

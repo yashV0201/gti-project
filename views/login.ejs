@@ -1,0 +1,38 @@
+<!-- views/login.ejs -->
+<%- include('partials/header') %>
+<div class="bg-slate-300 min-h-screen">
+  <div class="bg-slate-300 container mx-auto max-w-4xl p-4">
+    <h1 class="mb-6 mt-4 text-center text-5xl font-extrabold leading-tight text-gray-900">Admin Login</h1>
+    
+    <% if (error) { %>
+      <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mb-4">
+        <%= error %>
+      </div>
+    <% } %>
+    
+    <div class="bg-gray-50 rounded-lg shadow-md p-6 mb-4">
+      <form action="/login" method="POST" class="flex flex-col space-y-4">
+        <div>
+          <label for="username" class="block text-gray-700 text-sm font-bold mb-2">Username</label>
+          <input type="text" name="username" id="username" 
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 w-full" required>
+        </div>
+        
+        <div>
+          <label for="password" class="block text-gray-700 text-sm font-bold mb-2">Password</label>
+          <input type="password" name="password" id="password" 
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 w-full" required>
+        </div>
+        
+        <div class="flex items-center justify-center">
+          <button type="submit" 
+            class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center">
+            Login
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<%- include('partials/footer') %>
+

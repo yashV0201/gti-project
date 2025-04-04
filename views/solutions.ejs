@@ -4,8 +4,9 @@
     <div class="bg-slate-300 container mx-auto max-w-4xl p-4"> 
         <h1 class="mb-6 mt-4 text-center text-5xl font-extrabold leading-tight text-gray-900"><%= need.name %> - Solutions</h1>
         <div class="flex justify-between items-center mb-4">
-            <button id="addNewBtn" class="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Add New Solution</button>
-            
+          <% if(currentUser && currentUser.role === 'admin') {%>  
+          <button id="addNewBtn" class="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Add New Solution</button>
+          <% } %> 
             <form action='/subcategory/<%= need.id %>/design-methods'>
               <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Design Methods</button>
             </form>
@@ -27,8 +28,10 @@
               <div class="relative bg-gray-50 rounded-lg shadow-md p-6 transition-all duration-300 hover:shadow-lg hover:scale-105 flex flex-col h-full" data-id="<%= solution.id %>">
                 <div class="solution-content text-gray-800 mb-4 whitespace-pre-wrap flex-1"><%= solution.content %></div>
                 <div class="action-buttons flex gap-2 relative z-20 mt-auto">
+                  <% if(currentUser && currentUser.role === 'admin') {%>
                   <button class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-1.5 px-3 text-sm rounded-full transition-colors" onclick="editSolution('<%= solution.id %>')">Edit</button>
                   <button class="bg-red-600 hover:bg-red-700 text-white font-medium py-1.5 px-3 text-sm rounded-full transition-colors" onclick="deleteSolution('<%= solution.id %>')">Delete</button>
+                  <% } %>
                 </div>
               </div>
             <% }); %>
