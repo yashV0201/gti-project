@@ -6,6 +6,19 @@
       transform: scale(1.05);
   } 
 
+    /* Add these link-specific styles */
+    .design-document-content a {
+    word-break: break-all;
+    overflow-wrap: break-word;
+    max-width: 100%;
+    display: inline-block;
+    }
+
+    /* Additional specific styling for links in list items */
+    .design-document-content li a {
+    max-width: calc(100% - 25px);
+    }
+
   /* Image popup styles */
   #image-popup {
         display: none;
@@ -81,7 +94,7 @@
             <input type="hidden" name="id" value="<%= Number(id) %>">
             
             <div class="flex flex-col md:flex-row md:items-center gap-4">
-                <input type="file" class="flex-grow p-3 bg-gray-800 text-white rounded-lg">
+                <input type="file" id="document" name="document" class="flex-grow p-3 bg-gray-800 text-white rounded-lg">
                 <div class="flex gap-2">
                   <button class="px-6 py-2 bg-blue-600 text-white rounded-full">Save</button>
                   <button class="px-6 py-2 bg-red-600 text-white rounded-full">Cancel</button>
